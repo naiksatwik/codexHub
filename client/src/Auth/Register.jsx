@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import coding from "../assets/coding.png";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Register = () => {
   const submitData = async (e) => {
     e.preventDefault(); // Prevent page reload
 
-    // Simple validation
+   
     if (password !== confirmPassword) {
       setError("❗ Passwords do not match.");
       return;
@@ -34,7 +35,7 @@ const Register = () => {
       });
       
       if (response.status === 201) {
-        navigate("/home"); // Redirect on success
+        navigate("/room-gen") 
       }
     } catch (err) {
       console.error(err);
@@ -46,7 +47,7 @@ const Register = () => {
     <div className="h-screen bg-black flex flex-col justify-center items-center px-4">
       <div className="bg-zinc-900 rounded-xl p-8 w-full max-w-sm text-white shadow-xl">
         <div className="flex justify-center mb-6">
-          <div className="w-6 h-6 bg-gray-300 rounded rotate-45" />
+          <img src={coding} className='h-[4rem]'></img>
         </div>
         <h2 className="text-center text-2xl font-semibold mb-4">Create an account</h2>
 

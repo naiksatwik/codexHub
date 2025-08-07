@@ -1,12 +1,14 @@
 import axios from 'axios';
 import React,{useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import coding from "../assets/coding.png";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-   const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const submitData = async (e) => {
       e.preventDefault();
       
@@ -19,7 +21,7 @@ const Login = () => {
           })
 
           if(res.status == 201){
-            navigate("/home")
+            navigate("/room-gen")
           }
       }catch(err){
         console.error(err);
@@ -30,9 +32,9 @@ const Login = () => {
   return (
     <div className="h-screen bg-black flex flex-col justify-center items-center px-4">
       <div className="bg-zinc-900 rounded-xl p-8 w-full max-w-sm text-white shadow-xl">
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6 ">
           {/* Logo box or 3D cube alternative */}
-          <div className="w-6 h-6 bg-gray-300 rounded rotate-45" />
+          <img src={coding} className='h-[4rem]'></img>
         </div>
         <h2 className="text-center text-2xl font-semibold mb-6">Sign in</h2>
         {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
