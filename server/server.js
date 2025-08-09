@@ -11,8 +11,11 @@ require("dotenv").config();
 
 
 const authRoutes = require('./routes/userRoutes');
-app.use('/api/auth', authRoutes);
+const codeRoutes = require("./routes/runApi");
 
+
+app.use('/api/auth', authRoutes);
+app.use('/api/code', codeRoutes)
 
 // connecting to mangoDb
 mongoose.connect(process.env.MONGO_URL,{
