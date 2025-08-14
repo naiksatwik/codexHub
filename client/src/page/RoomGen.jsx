@@ -36,8 +36,6 @@ const RoomGen = () => {
           userName,
         },
       });
-    
-   
   }
   return (
     <>

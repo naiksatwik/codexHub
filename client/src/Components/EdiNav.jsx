@@ -6,9 +6,9 @@ export const EdiNav = ({ language, setLanguage, code, setOutput, input }) => {
   const runCode = async () => {
     try {
       const payload = {
-        code,
-        stdin: input || "",
-        language,
+        code ,
+        stdin: input,
+        language: (language == "python") ? "python3" : language,
         versionIndex: "0"
       };
 
@@ -34,23 +34,14 @@ export const EdiNav = ({ language, setLanguage, code, setOutput, input }) => {
   return (
     <div className="w-full h-[7%] bg-black flex items-center justify-evenly">
       <button
-        className="py-2 px-5 bg-green-500 border-2 border-white rounded-xl"
+        className="py-2 px-8 bg-green-500 border-2 border-white rounded-xl"
         onClick={runCode}
         disabled={!language || !code.trim()}
         title={!language ? "Select a language first" : !code.trim() ? "Write some code to run" : "Run code"}
       >
         Run
       </button>
-      <select
-        className="p-2 rounded bg-gray-600 text-white border border-gray-600"
-        value={language}
-        onChange={(e) => setLanguage(e.target.value)}
-      >
-        <option value="">-- Choose Language --</option>
-        <option value="python3">Python3</option>
-        <option value="java">Java</option>
-        <option value="cpp">C++</option>
-      </select>
+
     </div>
   );
 };

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "dev2" : "nodemon y-websocket-server.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,9 @@
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.10",
     "socket.io": "^4.8.1",
-    "uuid": "^11.1.0"
+    "socket.io-client": "^4.8.1",
+    "uuid": "^11.1.0",
+    "y-websocket": "^3.0.0"
   }
 }
+

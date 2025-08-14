@@ -1,60 +1,139 @@
-import React, { useState } from "react";
-import {CodeEditor }from "../Components/CodeEditor";
+import React, { useEffect, useRef, useState } from "react";
+import  {CodeEditor}  from "../Components/CodeEditor";
 import { SideBar } from "../Components/SideBar";
 import { EdiNav } from "../Components/EdiNav";
 import useDisableZoom from "../Components/useDisableZoom";
+import { initSocket } from "../connection/socket";
+import ACTIONS from "../Actions";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+import toast from "react-hot-toast";
+
+
 
 const EditorPage = () => {
 
   useDisableZoom();
-  
+
+  const reactNavigate = useNavigate();
+  const location = useLocation();
+  const socketRef = useRef(null);
+  const codeRef = useRef(null);
+  const roomId = useParams();
+
+  const [user, setUser] = useState([]);
+  useEffect(() => {
+    const init = async () => {
+      socketRef.current = await initSocket();
+
+      console.log(location.state?.userName);
+
+      socketRef.current.on("connect_error", (err) => {
+        handleErrors(err);
+      });
+
+      socketRef.current.on("connect_failed", (err) => {
+        handleErrors(err);
+      });
+
+      function handleErrors(err) {
+        console.log("socket error", e);
+        toast.error("Socket connection failed please try again later..");
+        reactNavigate("/");
+      }
+
+      socketRef.current.emit(ACTIONS.JOIN, {
+        roomId: roomId.roomId,
+        username: location.state?.userName,
+      });
+
+      // when user jet Joined this function get triggered
+      socketRef.current.on(
+        ACTIONS.JOINED,
+        ({ clients, username, socketId }) => {
+          // we are notifying client that new client Added...
+          // we checking don't show new client . [new client add]
+
+          
+          if (username !== location.state?.userName) {
+          
+            toast.success(`${username} is joined room ..`);
+            console.log(`${username} is joined room ..`);
+          }
+          
+          setUser(clients);
+
+          socketRef.current.emit(ACTIONS.SYNC_CODE,{
+            code : codeRef.current,
+            socketId,
+          });
+        }
+      );
+
+      // listening for disconnected
+
+      socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
+        toast.success(`${username} left the room.`);
+        setUser((prev) => {
+          return prev.filter((clients) => {
+            clients.socketId != socketId;
+          });
+        });
+      });
+    };
+
+    init();
+
+    //cleaning function
+    // important to clear listeners . because of memory leak
+    return()=>{
+       socketRef.current.disconnected();
+       socketRef.current.off(ACTIONS.JOINED);
+       socketRef.current.off(ACTIONS.DISCONNECTED);
+    }
+
+  }, []);
+
+
+  if (!location.state) {
+    return <Navigate to="/" />;
+  }
   const [code, setCode] = useState("");
 
   const [language, setLanguage] = useState("");
 
-  const [output, setOutput] = useState("click run to code")
+  const [output, setOutput] = useState("click run to code");
 
   const [input, setInput] = useState("");
-  //
-  const [user, setUser] = useState([
-    { socketId: 1, username: "Satwik Naik" },
-    { socketId: 2, username: "Sujan Naik" },
-    { socketId: 3, username: "Aryan Kumar" },
-    { socketId: 4, username: "Siddharth Verma" },
-    { socketId: 5, username: "Raju Patel" },
-    { socketId: 6, username: "Sohan Naik" },
-    { socketId: 7, username: "Priya Sharma" },
-    { socketId: 8, username: "Vikram Singh" },
-    { socketId: 9, username: "Neha Mehta" },
-    { socketId: 10, username: "Karan Gupta" },
-    { socketId: 11, username: "Anjali Desai" },
-    { socketId: 12, username: "Ravi Kumar" },
-    { socketId: 13, username: "Meera Joshi" },
-    { socketId: 14, username: "Aditya Nair" },
-    { socketId: 15, username: "Sneha Iyer" },
-    { socketId: 16, username: "Amit Bansal" },
-    { socketId: 17, username: "Divya Menon" },
-    { socketId: 18, username: "Rohit Chauhan" },
-    { socketId: 19, username: "Pooja Reddy" },
-    { socketId: 20, username: "Manoj Das" },
-    { socketId: 21, username: "Nisha Pillai" },
-    { socketId: 22, username: "Harsh Malhotra" },
-    { socketId: 23, username: "Tanya Kapoor" },
-    { socketId: 24, username: "Varun Saxena" },
-    { socketId: 25, username: "Rajesh Yadav" },
-    { socketId: 26, username: "Deepika Shetty" },
-    { socketId: 27, username: "Gaurav Sinha" },
-    { socketId: 28, username: "Simran Kaur" },
-    { socketId: 29, username: "Vivek Pandey" },
-    { socketId: 30, username: "Ankur Jain" },
-  ]);
+
   return (
     <div className=" flex">
-      <SideBar />
+      <SideBar user={user} />
 
       <div className="w-full h-[100vh] ">
-        <EdiNav language ={language} setLanguage ={setLanguage} code ={code} setOutput={setOutput}/>
-        <CodeEditor language ={language}  code={code} setCode ={setCode} output={output} input={input} setInput={setInput} />
+        <EdiNav
+          language={language}
+          setLanguage={setLanguage}
+          code={code}
+          setOutput={setOutput}
+        />
+        <CodeEditor
+          language={language}
+          code={code}
+          setCode={setCode}
+          output={output}
+          input={input}
+          setInput={setInput}
+          socketRef={socketRef}
+          roomId={roomId.roomId}
+          onCodeChange={(code)=>{
+            codeRef.current = code;
+          }}
+        />
       </div>
     </div>
   );
