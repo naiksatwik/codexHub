@@ -12,7 +12,6 @@
 - 👥 **Multi-User Sync** — Collaborate in real time with multiple users.  
 - 📝 **Interactive Code Editor** — Write, edit, and format C++ code using **CodeMirror**.  
 - ▶️ **Instant Code Execution** — Run code with input/output via **JDoodle API** (20 credits/day).  
-- 💾 **Persistent Sessions** — Store all work safely in **MongoDB**.  
 - ⚡ **Low-Latency Collaboration** — Real-time edits powered by **Socket.io**.  
 - 🌐 **Cross-Browser Support** — Works smoothly on all modern browsers.  
 
