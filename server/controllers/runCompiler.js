@@ -1,8 +1,7 @@
 const axios = require('axios');
-const { json } = require('express');
 
 const runCodeJDoodle = async (req, res) => {
-  const { code, stdin = "", language = "python3", versionIndex = "0" } = req.body;
+  const { code, stdin = "", language = "cpp17", versionIndex = "0" } = req.body;
   console.log(code)
   if (!code || !code.trim()) {
     return res.status(400).json({ error: "Code is required" });
@@ -12,7 +11,7 @@ const runCodeJDoodle = async (req, res) => {
     const payload = {
       clientId: process.env.JDOODLE_CLIENT_ID,
       clientSecret: process.env.JDOODLE_CLIENT_SECRET,
-      script: JSON.stringify(code),
+      script: code,   // ✅ FIXED
       stdin: stdin || "",
       language,
       versionIndex,
@@ -22,7 +21,7 @@ const runCodeJDoodle = async (req, res) => {
     const response = await axios.post(
       'https://api.jdoodle.com/v1/execute',
       payload,
-      { headers: { 'Content-Type': 'application/json' }, timeout: 15000 } // 15 sec timeout
+      { headers: { 'Content-Type': 'application/json' }, timeout: 15000 }
     );
 
     res.json({

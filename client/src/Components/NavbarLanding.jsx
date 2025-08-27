@@ -14,20 +14,7 @@ const NavbarLanding =() =>{
       
 
       {/* Right: Navigation Buttons */}
-      <div className="space-x-4">
-        <Link
-          to="/Login"
-          className="bg-white text-gray-900 px-4 py-3 rounded-2xl hover:bg-gray-200 transition-all"
-        >
-          Sign In
-        </Link>
-        <Link
-          to="/Register"
-          className="bg-white text-gray-900 px-4 py-3 rounded-2xl hover:bg-gray-200 transition-all"
-        >
-          Sign Up
-        </Link>
-      </div>
+      
     </nav>
   )
 }

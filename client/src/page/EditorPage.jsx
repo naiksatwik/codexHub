@@ -104,11 +104,13 @@ const EditorPage = () => {
   }
   const [code, setCode] = useState("");
 
-  const [language, setLanguage] = useState("");
+  const [language, setLanguage] = useState("cpp17");
 
   const [output, setOutput] = useState("click run to code");
 
   const [input, setInput] = useState("");
+  
+
 
   return (
     <div className=" flex">
@@ -120,6 +122,7 @@ const EditorPage = () => {
           setLanguage={setLanguage}
           code={code}
           setOutput={setOutput}
+          input={input}
         />
         <CodeEditor
           language={language}

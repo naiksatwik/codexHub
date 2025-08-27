@@ -26,7 +26,7 @@ export const HeroSec = () => {
       </p>
 
       <button className="z-10 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl text-lg shadow-lg transition duration-300" onClick={()=>{
-          navigate("/Login")
+          navigate("/room-gen")
         }}>
         Get Started for Free
       </button>

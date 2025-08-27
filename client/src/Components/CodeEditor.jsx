@@ -33,6 +33,7 @@ export const CodeEditor = ({
 
   const editorRef = useRef(null);
 
+
   useEffect(() => {
 
     async function init(){
@@ -68,6 +69,7 @@ export const CodeEditor = ({
       const {origin} = changes;
       const code = instance.getValue();
       onCodeChange(code);
+      setCode(code);
       if(origin !== 'setValue'){
           socketRef.current.emit(ACTIONS.CODE_CHANGE,{
             roomId,
@@ -75,11 +77,6 @@ export const CodeEditor = ({
           });
       }
     });
-
-    
-
-    // 
-
   }
 
   init();
@@ -129,7 +126,7 @@ export const CodeEditor = ({
                 Input
               </h2>
               <textarea
-                value={input}
+                defaultValue={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Enter your input here..."
                 className="flex-1 p-2 rounded bg-black text-white border border-green-500 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
